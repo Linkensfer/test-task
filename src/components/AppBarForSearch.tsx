@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button';
+import styles from './AppBarForSearch.module.scss'
 
 interface AppBarForSearch {
   inputText: string,
@@ -60,17 +61,18 @@ export function AppBarForSearch({inputText, setInputText}: AppBarForSearch) {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <Search>
+          <div className={styles.search}>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
-            <StyledInputBase
+            <InputBase
+              className={styles.input}
               placeholder="GitHub Search Repositories..."
               inputProps={{ 'aria-label': 'search' }}
               value={inputText}
               onChange={e => setInputText(e.target.value)}
             />
-          </Search>
+          </div>
           {/* <Button variant="contained" sx={{ marginLeft: 2 }}>ИСКАТЬ</Button> */}
         </Toolbar>
       </AppBar>
