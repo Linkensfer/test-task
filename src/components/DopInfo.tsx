@@ -2,6 +2,7 @@ import { IUserRepo } from "../models/models";
 import { RepoCard } from "./RepoCard"; 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import styles from './DopInfo.module.scss'
 
 interface DopInfo {
   visibility: boolean,
@@ -12,29 +13,12 @@ export function DopInfo( {visibility, dopInfo}: DopInfo) {
   return (
     <>
       {/* контейнер Box для доп. информации о репозитории */}
-      {visibility && !dopInfo ? <Box
-        sx={{
-          width: '25%',
-          marginLeft: 1,
-          paddingLeft: 3,
-          minHeight: '85vh',
-          backgroundColor: 'secondary.main',
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center"
-        }}>
-          <Typography variant='h5'
-            sx={{ textAlign: 'center', verticalAlign: 'middle' }}>
+      {visibility && !dopInfo ? <div className={styles.wrapper}>
+          <Typography variant='h5' className={styles.text}>
             Выберите репозиторий
           </Typography>
-        </Box> :
-      <Box
-        sx={{
-          width: '25%',
-          marginLeft: 1,
-          paddingLeft: 3,
-          backgroundColor: 'secondary.main'
-        }}>
+        </div> :
+      <Box className={styles.card}>
         {dopInfo && visibility && <div>
           <RepoCard 
             repo={dopInfo}

@@ -1,0 +1,16 @@
+.table {
+  min-width: 650px;
+}
+
+.table th {
+  &:hover {
+    background-color: #F2F2F2;
+  }
+  text-align: center;
+}
+
+.tableBodyRow {
+  &:hover {
+    background-color: #2196F30A;
+  } 
+} 

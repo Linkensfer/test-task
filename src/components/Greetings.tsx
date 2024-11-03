@@ -1,5 +1,5 @@
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import styles from './Greetings.module.scss'
 
 interface dropdownVisibility {
   visibility: boolean
@@ -8,11 +8,10 @@ interface dropdownVisibility {
 export function Greetings( {visibility}: dropdownVisibility) {
   return (
     visibility ? <h1>Результаты поиска</h1> :
-      <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", minHeight: '100vh' }}>
-        <Typography variant='h2'
-          sx={{ textAlign: 'center', verticalAlign: 'middle' }}>
+      <div className={styles.wrapper}>
+        <Typography variant='h2' className={styles.text}>
           Добро пожаловать
         </Typography>
-      </Box>
+      </div>
   )
 }

@@ -13,14 +13,14 @@ interface PaginationOfServerResponse {
 const DEFAULT_MAX_TOTAL_COUNT = 1000
 
 export function PaginationOfServerResponse( {repo, visibility, isFetching, perPage, setPage}: PaginationOfServerResponse) {
-    // получения максимального кол-ва страниц при поиске
-    const totalCount = repo?.totalCount
-    const maxPageCount = totalCount && Math.ceil(Math.min(totalCount, DEFAULT_MAX_TOTAL_COUNT)/perPage)
+  // получения максимального кол-ва страниц при поиске
+  const totalCount = repo?.totalCount
+  const maxPageCount = totalCount && Math.ceil(Math.min(totalCount, DEFAULT_MAX_TOTAL_COUNT)/perPage)
 
-    // обработчик выбора страницы page по клику
-    const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-      setPage(value);
-    }
+  // обработчик выбора страницы page по клику
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  }
 
   return (
     <>

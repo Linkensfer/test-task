@@ -3,6 +3,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import styles from './SelectFromDropDownList.module.scss'
 
 interface SelectFromDropDownList {
   visibility: boolean,
@@ -22,9 +23,9 @@ export function SelectFromDropDownList( {visibility, perPage, setPerPage}: Selec
   return (
     <>
       {/* если state dropdown в значении true, тогда показывать выпадающий список select */}
-      {visibility && <Box sx={{ display: "flex", justifyContent: "left"}}>
+      {visibility && <Box className={styles.wrapper}>
         <h3>Rows per page:</h3>
-        <FormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
+        <FormControl variant="standard" className={styles.select}>
           <InputLabel id="demo-simple-select-standard-label">Elements on the page</InputLabel>
           <Select
             labelId="demo-simple-select-standard-label"
@@ -39,7 +40,6 @@ export function SelectFromDropDownList( {visibility, perPage, setPerPage}: Selec
             }
           </Select>
         </FormControl>
-        {/* <footer>TEST FOOTER</footer> */}
       </Box>}
     </>
   )

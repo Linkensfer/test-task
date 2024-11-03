@@ -8,6 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TableFooter from '@mui/material/TableFooter';
+import styles from './TableWithSearchResults.module.scss'
 
 interface TableWithSearchResults {
   visibility: boolean,
@@ -54,17 +55,18 @@ export function TableWithSearchResults( {visibility, setDopInfo, setSortClick, s
     <>
     {/* если state dropdown в значении true, тогда показывать таблицу */}
     {visibility && <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table className={styles.table} aria-label="simple table">
         <TableHead>
           <TableRow>
             {tableArray.map(item => (
               <TableCell
-                sx={{
-                  '&:hover': {
-                    backgroundColor: 'secondary.main',
-                  },
-                }}
-                align="center" // выравнивание текста
+                className={styles.tableHeadRow}
+                // sx={{
+                //   '&:hover': {
+                //     backgroundColor: 'secondary.main',
+                //   },
+                // }}
+                // align="center" // выравнивание текста
                 key={item}
                 onClick={() => clickSortHandler(item)}
               >{ item }</TableCell>
@@ -79,11 +81,7 @@ export function TableWithSearchResults( {visibility, setDopInfo, setSortClick, s
             <TableRow
               key={repo.id}
               onClick={() => dopInfoClickHandler(repo)}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 },
-                '&:hover': {
-                  backgroundColor: '#2196F30A',
-                },
-              }}
+              className={styles.tableBodyRow}
             >
               <TableCell align="center">{ repo.name }</TableCell>
               <TableCell align="center">{ repo.language }</TableCell>
