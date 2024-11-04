@@ -7,36 +7,38 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import TableFooter from '@mui/material/TableFooter';
 import styles from './TableWithSearchResults.module.scss'
+import { ColumnName, OrderName, OrderSymbols, tableArray } from "../constants";
 
-interface TableWithSearchResults {
-  visibility: boolean,
-  setDopInfo(value: IUserRepo | ''): void,
-  setSortClick(value: string): void,
-  sortOrder: string,
-  setSortOrder(value: string): void,
-  repo: Response | undefined,
+interface TableWithSearchResultsProps {
+  visibility: boolean
+  setDopInfo(value: IUserRepo | ''): void
+  sortClick: ColumnName
+  setSortClick(value: ColumnName): void
+  sortOrder: OrderName
+  setSortOrder(value: OrderName): void
+  repo: Response | undefined
   isLoading: boolean
 }
 
-export function TableWithSearchResults( {visibility, setDopInfo, setSortClick, sortOrder, setSortOrder, repo, isLoading }: TableWithSearchResults) {
+export function TableWithSearchResults( {visibility, setDopInfo, sortClick, setSortClick, sortOrder, setSortOrder, repo, isLoading }: TableWithSearchResultsProps) {
   // метод clickHandler, который будет принимать название репозитория, по которому был клик
   const dopInfoClickHandler = (repos: IUserRepo | '') => {
     setDopInfo(repos)
   }
 
-  // массив, содержащий названия столбцов шапки таблицы
-  const chosenSortOrder: string = (sortOrder === 'desc') ? '↓ Название' : '↑ Название'
-  const tableArray: string[] = [chosenSortOrder, 'Язык', 'Число форков', 'Число звезд', 'Дата обновления']
-
   // функция для обработки клика: выбор фильтра и порядка сортировки
-  const clickSortHandler = (selectedFilter: string) => {
-    (selectedFilter === 'Число форков') ? setSortClick('forks') :
-    (selectedFilter === 'Число звезд') ? setSortClick('stars') :
-    (selectedFilter === 'Дата обновления') ? setSortClick('updated') :
-    (selectedFilter === '↓ Название' && sortOrder === 'desc') ? setSortOrder('asc') :
-    setSortOrder('desc')
+  const clickSortHandler = (selectedFilter: ColumnName) => {
+    // если это неактивная колонка для сортировки - то устанавливаем название сортировки и порядок - asc
+    if (selectedFilter !== sortClick) {
+      setSortClick(selectedFilter)
+      setSortOrder(OrderName.Asc)
+      return
+    }
+
+    // иначе просто меняем порядок
+    const chosenSortOrder: OrderName = sortOrder === OrderName.Desc ? OrderName.Asc : OrderName.Desc
+    setSortOrder(chosenSortOrder)
   }
 
   // Обработка ответа от сервера: получение строки с датой
@@ -58,19 +60,19 @@ export function TableWithSearchResults( {visibility, setDopInfo, setSortClick, s
       <Table className={styles.table} aria-label="simple table">
         <TableHead>
           <TableRow>
-            {tableArray.map(item => (
+            {tableArray.map(item => {
+              const orderSymbol = item.id === sortClick ? OrderSymbols[sortOrder] : ''
+              const titleName = `${orderSymbol} ${item.name}`
+
+              return (
               <TableCell
                 className={styles.tableHeadRow}
-                // sx={{
-                //   '&:hover': {
-                //     backgroundColor: 'secondary.main',
-                //   },
-                // }}
-                // align="center" // выравнивание текста
-                key={item}
-                onClick={() => clickSortHandler(item)}
-              >{ item }</TableCell>
-            ))}
+                key={item.id}
+                onClick={() => clickSortHandler(item.id)}
+              >
+                { titleName }
+              </TableCell>
+)})}
           </TableRow>
         </TableHead>
 

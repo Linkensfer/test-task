@@ -9,13 +9,14 @@ import { SelectFromDropDownList } from "./components/SelectFromDropDownList";
 import { PaginationOfServerResponse } from "./components/PaginationOfServerResponse";
 import { DopInfo } from "./components/DopInfo";
 import Box from '@mui/material/Box';
+import { ColumnName, OrderName } from "./constants";
 
 export function Search() {
   const [page, setPage] = useState<number>(1)  // state для пагинации (хранения состояния текущей страницы)
   const [perPage, setPerPage] = useState<number>(10) // state для пагинации (выбора количества отрисовываемых на странице элементов)
 
-  const [sortClick, setSortClick] = useState('none') // state для выбора фильтра (по какому фильтру сортировать)
-  const [sortOrder, setSortOrder] = useState('desc') // state для порядка сортировка (по возрастания/по убыванию; по умолчанию - по убыванию)
+  const [sortClick, setSortClick] = useState<ColumnName>(ColumnName.Name) // state для выбора фильтра (по какому фильтру сортировать)
+  const [sortOrder, setSortOrder] = useState<OrderName>(OrderName.Asc) // state для порядка сортировка (по возрастания/по убыванию; по умолчанию - по убыванию)
 
   const [search, setSearch] = useState('') // state для input
   const [dropdown, setDropdown] = useState(false) // state для видимости (скрытия) списка рерозиториев при поиске в input, чтобы после набора запроса и его последующего удаления список больше не показывался
@@ -71,6 +72,7 @@ export function Search() {
           <TableWithSearchResults
             visibility={dropdown}
             setDopInfo={setDopInfo}
+            sortClick={sortClick}
             setSortClick={setSortClick}
             sortOrder={sortOrder}
             setSortOrder={setSortOrder}
