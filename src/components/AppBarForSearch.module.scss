@@ -1,16 +1,32 @@
 .search {
-    position: relative;
-    border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.15);
-    margin-left: 0;
-    width: 100%;
+  position: relative;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.15);
+  margin-left: 0;
+  padding-left: 0%;
+  width: 35%;
+  min-height: 100%;
 
-    &:hover {
-        background-color: rgba(255, 255, 255, 0.25);
-    }
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+  }
 }
 
-.input {
-    color: inherit;
-    width: 100%;
+.icon {
+  padding-left: 15px;
+  padding-right: 0px;
+  height: 100%;
+  position: absolute;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search .input {
+  color:white;
+  width: 100%;
+  position: relative;
+  display: flex;
+  margin-left: 50px;
 }

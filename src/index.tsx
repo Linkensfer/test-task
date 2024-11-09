@@ -23,10 +23,10 @@ const theme = createTheme({
 
 root.render(
   <Provider store={store}>
-      <React.StrictMode>
-        <ThemeProvider theme={theme}>
-          <App />
-        </ThemeProvider>
-      </React.StrictMode>
+    <React.StrictMode>
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
+    </React.StrictMode>
   </Provider>
 );

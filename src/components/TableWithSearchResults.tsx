@@ -7,35 +7,37 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import TableFooter from '@mui/material/TableFooter';
+import styles from './TableWithSearchResults.module.scss'
+import { ColumnName, OrderName, OrderSymbols, tableArray } from "../constants";
 
-interface TableWithSearchResults {
-  visibility: boolean,
-  setDopInfo(value: IUserRepo | ''): void,
-  setSortClick(value: string): void,
-  sortOrder: string,
-  setSortOrder(value: string): void,
-  repo: Response | undefined,
+interface TableWithSearchResultsProps {
+  setDopInfo(value: IUserRepo | null): void
+  sortClick: ColumnName
+  setSortClick(value: ColumnName): void
+  sortOrder: OrderName
+  setSortOrder(value: OrderName): void
+  repo: Response | undefined
   isLoading: boolean
 }
 
-export function TableWithSearchResults( {visibility, setDopInfo, setSortClick, sortOrder, setSortOrder, repo, isLoading }: TableWithSearchResults) {
+export function TableWithSearchResults( {setDopInfo, sortClick, setSortClick, sortOrder, setSortOrder, repo, isLoading }: TableWithSearchResultsProps) {
   // метод clickHandler, который будет принимать название репозитория, по которому был клик
-  const dopInfoClickHandler = (repos: IUserRepo | '') => {
+  const dopInfoClickHandler = (repos: IUserRepo | null) => {
     setDopInfo(repos)
   }
 
-  // массив, содержащий названия столбцов шапки таблицы
-  const chosenSortOrder: string = (sortOrder === 'desc') ? '↓ Название' : '↑ Название'
-  const tableArray: string[] = [chosenSortOrder, 'Язык', 'Число форков', 'Число звезд', 'Дата обновления']
-
   // функция для обработки клика: выбор фильтра и порядка сортировки
-  const clickSortHandler = (selectedFilter: string) => {
-    (selectedFilter === 'Число форков') ? setSortClick('forks') :
-    (selectedFilter === 'Число звезд') ? setSortClick('stars') :
-    (selectedFilter === 'Дата обновления') ? setSortClick('updated') :
-    (selectedFilter === '↓ Название' && sortOrder === 'desc') ? setSortOrder('asc') :
-    setSortOrder('desc')
+  const clickSortHandler = (selectedFilter: ColumnName) => {
+    // если колонка для сортировки неактивная, то устанавливается название сортировки и порядок - desc
+    if (selectedFilter !== sortClick) {
+      setSortClick(selectedFilter)
+      setSortOrder(OrderName.Desc)
+      return
+    }
+
+    // иначе меняется порядок
+    const chosenSortOrder: OrderName = sortOrder === OrderName.Desc ? OrderName.Asc : OrderName.Desc
+    setSortOrder(chosenSortOrder)
   }
 
   // Обработка ответа от сервера: получение строки с датой
@@ -51,39 +53,32 @@ export function TableWithSearchResults( {visibility, setDopInfo, setSortClick, s
   }
 
   return (
-    <>
-    {/* если state dropdown в значении true, тогда показывать таблицу */}
-    {visibility && <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+    <TableContainer component={Paper}>
+      <Table className={styles.table} aria-label="simple table">
         <TableHead>
           <TableRow>
-            {tableArray.map(item => (
+            {tableArray.map(item => {
+              const orderSymbol = item.id === sortClick ? OrderSymbols[sortOrder] : ''
+              const titleName = `${orderSymbol} ${item.name}`
+              return (
               <TableCell
-                sx={{
-                  '&:hover': {
-                    backgroundColor: 'secondary.main',
-                  },
-                }}
-                align="center" // выравнивание текста
-                key={item}
-                onClick={() => clickSortHandler(item)}
-              >{ item }</TableCell>
-            ))}
+                className={styles.tableHeadRow}
+                key={item.id}
+                onClick={() => clickSortHandler(item.id)}
+              >
+                { titleName }
+              </TableCell>)
+            })}
           </TableRow>
         </TableHead>
 
         <TableBody>
           { isLoading && <p>Loading...</p> }
-          {/* если state dropdown в значении true, тогда показывать строки в таблице TableRow */}
-          {visibility && repo?.items?.map((repo, index) => (
+          {repo?.items?.map((repo, index) => (
             <TableRow
               key={repo.id}
               onClick={() => dopInfoClickHandler(repo)}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 },
-                '&:hover': {
-                  backgroundColor: '#2196F30A',
-                },
-              }}
+              className={styles.tableBodyRow}
             >
               <TableCell align="center">{ repo.name }</TableCell>
               <TableCell align="center">{ repo.language }</TableCell>
@@ -91,10 +86,9 @@ export function TableWithSearchResults( {visibility, setDopInfo, setSortClick, s
               <TableCell align="center">{ repo.stargazers_count }</TableCell>
               <TableCell align="center">{ getReposDate(index) }</TableCell>
             </TableRow>
-            ))}
+          ))}
         </TableBody>
       </Table>
-    </TableContainer>}
-    </>
+    </TableContainer>
   )
 }

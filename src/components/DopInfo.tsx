@@ -2,45 +2,26 @@ import { IUserRepo } from "../models/models";
 import { RepoCard } from "./RepoCard"; 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import styles from './DopInfo.module.scss'
 
-interface DopInfo {
-  visibility: boolean,
-  dopInfo: IUserRepo | ''
+interface DopInfoProps {
+  dopInfo: IUserRepo | null
 }
 
-export function DopInfo( {visibility, dopInfo}: DopInfo) {
+export function DopInfo( {dopInfo}: DopInfoProps) {
+  if (!dopInfo) {
+    return (
+      <div className={styles.wrapper}>
+        <Typography variant='h5' className={styles.text}>
+          Выберите репозиторий
+        </Typography>
+      </div>
+    )
+  }
+
   return (
-    <>
-      {/* контейнер Box для доп. информации о репозитории */}
-      {visibility && !dopInfo ? <Box
-        sx={{
-          width: '25%',
-          marginLeft: 1,
-          paddingLeft: 3,
-          minHeight: '85vh',
-          backgroundColor: 'secondary.main',
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center"
-        }}>
-          <Typography variant='h5'
-            sx={{ textAlign: 'center', verticalAlign: 'middle' }}>
-            Выберите репозиторий
-          </Typography>
-        </Box> :
-      <Box
-        sx={{
-          width: '25%',
-          marginLeft: 1,
-          paddingLeft: 3,
-          backgroundColor: 'secondary.main'
-        }}>
-        {dopInfo && visibility && <div>
-          <RepoCard 
-            repo={dopInfo}
-          />
-        </div>}
-      </Box>}
-    </>
+    <Box className={styles.card}>
+      <RepoCard repo={dopInfo}/>
+    </Box>
   )
 }
