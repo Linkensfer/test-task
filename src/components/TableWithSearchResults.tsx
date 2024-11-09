@@ -11,8 +11,7 @@ import styles from './TableWithSearchResults.module.scss'
 import { ColumnName, OrderName, OrderSymbols, tableArray } from "../constants";
 
 interface TableWithSearchResultsProps {
-  visibility: boolean
-  setDopInfo(value: IUserRepo | ''): void
+  setDopInfo(value: IUserRepo | null): void
   sortClick: ColumnName
   setSortClick(value: ColumnName): void
   sortOrder: OrderName
@@ -21,22 +20,22 @@ interface TableWithSearchResultsProps {
   isLoading: boolean
 }
 
-export function TableWithSearchResults( {visibility, setDopInfo, sortClick, setSortClick, sortOrder, setSortOrder, repo, isLoading }: TableWithSearchResultsProps) {
+export function TableWithSearchResults( {setDopInfo, sortClick, setSortClick, sortOrder, setSortOrder, repo, isLoading }: TableWithSearchResultsProps) {
   // метод clickHandler, который будет принимать название репозитория, по которому был клик
-  const dopInfoClickHandler = (repos: IUserRepo | '') => {
+  const dopInfoClickHandler = (repos: IUserRepo | null) => {
     setDopInfo(repos)
   }
 
   // функция для обработки клика: выбор фильтра и порядка сортировки
   const clickSortHandler = (selectedFilter: ColumnName) => {
-    // если это неактивная колонка для сортировки - то устанавливаем название сортировки и порядок - asc
+    // если колонка для сортировки неактивная, то устанавливается название сортировки и порядок - desc
     if (selectedFilter !== sortClick) {
       setSortClick(selectedFilter)
-      setSortOrder(OrderName.Asc)
+      setSortOrder(OrderName.Desc)
       return
     }
 
-    // иначе просто меняем порядок
+    // иначе меняется порядок
     const chosenSortOrder: OrderName = sortOrder === OrderName.Desc ? OrderName.Asc : OrderName.Desc
     setSortOrder(chosenSortOrder)
   }
@@ -54,16 +53,13 @@ export function TableWithSearchResults( {visibility, setDopInfo, sortClick, setS
   }
 
   return (
-    <>
-    {/* если state dropdown в значении true, тогда показывать таблицу */}
-    {visibility && <TableContainer component={Paper}>
+    <TableContainer component={Paper}>
       <Table className={styles.table} aria-label="simple table">
         <TableHead>
           <TableRow>
             {tableArray.map(item => {
               const orderSymbol = item.id === sortClick ? OrderSymbols[sortOrder] : ''
               const titleName = `${orderSymbol} ${item.name}`
-
               return (
               <TableCell
                 className={styles.tableHeadRow}
@@ -71,15 +67,14 @@ export function TableWithSearchResults( {visibility, setDopInfo, sortClick, setS
                 onClick={() => clickSortHandler(item.id)}
               >
                 { titleName }
-              </TableCell>
-)})}
+              </TableCell>)
+            })}
           </TableRow>
         </TableHead>
 
         <TableBody>
           { isLoading && <p>Loading...</p> }
-          {/* если state dropdown в значении true, тогда показывать строки в таблице TableRow */}
-          {visibility && repo?.items?.map((repo, index) => (
+          {repo?.items?.map((repo, index) => (
             <TableRow
               key={repo.id}
               onClick={() => dopInfoClickHandler(repo)}
@@ -91,10 +86,9 @@ export function TableWithSearchResults( {visibility, setDopInfo, sortClick, setS
               <TableCell align="center">{ repo.stargazers_count }</TableCell>
               <TableCell align="center">{ getReposDate(index) }</TableCell>
             </TableRow>
-            ))}
+          ))}
         </TableBody>
       </Table>
-    </TableContainer>}
-    </>
+    </TableContainer>
   )
 }

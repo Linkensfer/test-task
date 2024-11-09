@@ -1,18 +1,16 @@
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import styles from './AppBarForSearch.module.scss'
 
-interface AppBarForSearch {
+interface AppBarForSearchProps {
   inputText: string,
   setInputText(value: string): void
 }
 
-export function AppBarForSearch({inputText, setInputText}: AppBarForSearch) {
-  // AppBar и InputBase
+export function AppBarForSearch({inputText, setInputText}: AppBarForSearchProps) {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">

@@ -13,18 +13,18 @@ export const getGitHubRepositories = createApi({
   }),
   refetchOnFocus: true, // для обновления данных на странице в случае, если фокусом пользователь вновь на неё вернулся спустя какое-то время
   endpoints: build => ({ // третий обязательный ключ endpoints - это функция, которая принимает параметр build; в ней нужно вернуть объект, где будут перечислены все необходимые endpoints
-    searchRepositories: build.query<Response, {search: string, page: number, per_page: number, sort: string, order: string}>({ // указания названия endpoint, например, searchRepositories - это ключ объекта (в данном случае для получения репозиториев пользователей); запрос формируется с помощью объекта build; у build есть 2 метода: query - для выполнения запроса, получения данных, и mutation - для изменения данных; в query передаётся объект, в котором описывается сам запрос; Типизация: первый дженерик - то, что получается в ответе от сервера; второй - какой параметр принимается для осуществления запроса (в данном случае это search: string)
+    searchRepositories: build.query<Response, {search: string, page: number, per_page: number, sort: string, order: string}>({ // указания названия endpoint, например, searchRepositories - это ключ объекта (в данном случае для получения репозиториев пользователей); запрос формируется с помощью объекта build; у build есть 2 метода: query - для выполнения запроса, получения данных, и mutation - для изменения данных; в query передаётся объект, в котором описывается сам запрос; Типизация: первый дженерик - то, что получается в ответе от сервера; второй - какой параметр принимается для осуществления запроса
       query: ({search, page, per_page, sort, order}) => ({
         url: `search/repositories`, // эта строчка (для поиска репозиториев) конкатинируется с baseUrl
         params: { // указание дополнительных параметров
           q: search, // search указан как параметр в качестве запроса; для GitHub API нужно свойство q, в котором указывается непосредственно search
-          per_page: per_page, // указание количества параметров, которое прилетает с сервера, с помощью свойства per_page для GitHub API (см. документацию на API)
+          per_page: per_page,
           page: page,
           sort: sort,
           order: order
         }
       }),
-      transformResponse: (response: ServerResponse<IUserRepo>) => { // использование свойства transformResponse сразу после query для трансформации данных из ответа: в данном случае чтобы убрать корневой уровень с различными данными (например, total_count: number и incomplete_results: boolean) и оставить только items; при этом нужно указать тип для searchRepositories: build.query<IUserRepo[], string>, потому что он поменялся из-за изменения ответа с сервера
+      transformResponse: (response: ServerResponse<IUserRepo>) => { // использование свойства transformResponse сразу после query для трансформации данных из ответа: в данном случае чтобы убрать корневой уровень с различными данными (например, total_count: number и incomplete_results: boolean) и оставить только items и totalCount
         return {
           items: response.items,
           totalCount: response.total_count

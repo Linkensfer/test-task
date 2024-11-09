@@ -1,6 +1,6 @@
 import { ColumnName, ColumnTitle } from "./constants"
 
-export type TableArryaType = {
-    name: ColumnTitle
-    id: ColumnName
-  }
+export type TableArrayType = {
+  name: ColumnTitle
+  id: ColumnName
+}

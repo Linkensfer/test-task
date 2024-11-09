@@ -4,27 +4,24 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import styles from './DopInfo.module.scss'
 
-interface DopInfo {
-  visibility: boolean,
-  dopInfo: IUserRepo | ''
+interface DopInfoProps {
+  dopInfo: IUserRepo | null
 }
 
-export function DopInfo( {visibility, dopInfo}: DopInfo) {
+export function DopInfo( {dopInfo}: DopInfoProps) {
+  if (!dopInfo) {
+    return (
+      <div className={styles.wrapper}>
+        <Typography variant='h5' className={styles.text}>
+          Выберите репозиторий
+        </Typography>
+      </div>
+    )
+  }
+
   return (
-    <>
-      {/* контейнер Box для доп. информации о репозитории */}
-      {visibility && !dopInfo ? <div className={styles.wrapper}>
-          <Typography variant='h5' className={styles.text}>
-            Выберите репозиторий
-          </Typography>
-        </div> :
-      <Box className={styles.card}>
-        {dopInfo && visibility && <div>
-          <RepoCard 
-            repo={dopInfo}
-          />
-        </div>}
-      </Box>}
-    </>
+    <Box className={styles.card}>
+      <RepoCard repo={dopInfo}/>
+    </Box>
   )
 }
